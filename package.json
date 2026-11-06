@@ -1,0 +1,25 @@
+{
+  "name": "phonex-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PhoneX storefront and backend API",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server.js",
+    "db:migrate": "node --env-file-if-exists=.env scripts\\migrate.js",
+    "setup:database": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\\setup-database.ps1",
+    "setup:admin": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts\\set-admin-password.ps1",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.7",
+    "express": "^5.1.0",
+    "express-rate-limit": "^8.1.0",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12"
+  }
+}
