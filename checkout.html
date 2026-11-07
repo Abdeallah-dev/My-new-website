@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#080d18">
+  <meta name="description" content="راجع سلتك وأدخل معلومات التوصيل لإرسال طلبك إلى PhoneX عبر WhatsApp.">
+  <title>PhoneX | إتمام الطلب</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
+  <script src="index.js" defer></script>
+</head>
+<body data-page="checkout">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html" aria-label="PhoneX - الرئيسية"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Phone<span class="brand-accent">X</span></span></a>
+      <nav class="main-nav" aria-label="القائمة الرئيسية"><a href="index.html">الرئيسية</a><a href="products.html">المنتجات</a><a href="about.html">من نحن</a><a href="contact.html">تواصل معنا</a></nav>
+      <a class="cart-button active" href="checkout.html" aria-label="سلة المشتريات"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h8.7a2 2 0 0 0 1.9-1.4L22 8H6M10 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm8 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/></svg><span>السلة</span><span class="cart-count" id="cart-count">0</span></a>
+    </div>
+  </header>
+  <main>
+    <section class="page-banner checkout-banner"><div class="container"><span class="section-kicker">بقيت خطوة واحدة لإتمام طلبك</span><h1>إتمام الطلب</h1><p>راجع المنتجات المختارة، وأدخل معلومات التوصيل، ثم أكد الطلب وأرسل تفاصيله إلى المتجر عبر WhatsApp.</p><div class="breadcrumbs"><a href="index.html">الرئيسية</a><span>/</span><span>إتمام الطلب</span></div></div></section>
+    <section class="checkout-section section-pad checkout-page"><div class="container">
+      <div class="checkout-layout">
+        <form class="customer-form panel" id="customer-form" novalidate>
+          <div class="panel-heading"><span class="step-number">01</span><div><h3>معلومات التوصيل</h3><p>أدخل المعلومات اللازمة لتوصيل طلبك.</p></div></div>
+          <div id="customer-details">
+            <div class="form-grid">
+              <label class="field field-full">الاسم الكامل <span class="required">*</span><input name="fullName" autocomplete="name" placeholder="مثال: سارة العلوي" required><small class="field-error"></small></label>
+              <label class="field">رقم الهاتف <span class="required">*</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="06 00 00 00 00" required><small class="field-error"></small></label>
+              <label class="field">المدينة <span class="required">*</span><input name="city" autocomplete="address-level2" placeholder="مثال: الدار البيضاء" required><small class="field-error"></small></label>
+              <label class="field field-full">عنوان التوصيل بالتفصيل <span class="required">*</span><textarea name="address" autocomplete="street-address" rows="3" placeholder="الحي، اسم الشارع، رقم المنزل أو أقرب معلم..." required></textarea><small class="field-error"></small></label>
+              <label class="field field-full">ملاحظات إضافية <span class="optional">(اختياري)</span><textarea name="notes" rows="2" placeholder="وقت مناسب للتوصيل أو أي تفاصيل أخرى..."></textarea></label>
+            </div>
+            <div class="privacy-note"><span aria-hidden="true">ⓘ</span><p>تُحفظ نسخة تجريبية من الطلب في هذا الجهاز فقط، ويمكنك إرساله للمتجر عبر WhatsApp بعد التأكيد.</p></div>
+            <div class="form-actions">
+              <button class="confirm-button" type="submit">مراجعة الطلب <span aria-hidden="true">←</span></button>
+            </div>
+          </div>
+          <section class="order-review" id="order-review" hidden aria-labelledby="review-title">
+            <div class="panel-heading"><span class="step-number">02</span><div><h3 id="review-title">مراجعة الطلب</h3><p>تأكد من معلومات التوصيل والمنتجات قبل التأكيد.</p></div></div>
+            <dl class="review-customer">
+              <div><dt>الاسم الكامل</dt><dd id="review-full-name"></dd></div>
+              <div><dt>رقم الهاتف</dt><dd id="review-phone" dir="ltr"></dd></div>
+              <div><dt>المدينة</dt><dd id="review-city"></dd></div>
+              <div><dt>العنوان</dt><dd id="review-address"></dd></div>
+              <div><dt>ملاحظات</dt><dd id="review-notes"></dd></div>
+            </dl>
+            <div class="review-items" id="review-items"></div>
+            <div class="order-total"><span>المجموع الإجمالي</span><strong id="review-total"></strong></div>
+            <div class="form-actions review-actions">
+              <button class="secondary-button" id="back-to-edit" type="button">تعديل المعلومات</button>
+              <button class="confirm-button" id="confirm-order" type="button">تأكيد الطلب <span aria-hidden="true">✓</span></button>
+            </div>
+          </section>
+        </form>
+        <aside class="order-panel panel">
+          <div class="panel-heading"><span class="step-number">02</span><div><h3>ملخص الطلب</h3><p>تحقق من المنتجات والكميات قبل الإرسال.</p></div></div>
+          <div class="order-items" id="order-items"></div>
+          <div class="order-total"><span>المجموع الإجمالي</span><strong id="order-total">0 MAD</strong></div>
+          <div class="total-caption">المبلغ بالدرهم المغربي (MAD)</div>
+          <div class="delivery-caption"><span>⌂</span><span>سيتم تأكيد تكلفة التوصيل معك عبر WhatsApp.</span></div>
+          <a class="continue-checkout-button" id="continue-checkout" href="products.html">تصفح المنتجات <span aria-hidden="true">←</span></a>
+        </aside>
+      </div>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container footer-inner"><a class="brand footer-brand" href="index.html"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>Phone<span class="brand-accent">X</span></span></a><p>اختيارات ذكية. تجربة أسهل.</p><nav class="footer-links" aria-label="روابط التذييل"><a href="index.html">الرئيسية</a><a href="products.html">المنتجات</a><a href="about.html">من نحن</a><a href="contact.html">تواصل معنا</a></nav><div class="footer-contact"><a class="footer-email" id="store-email-link" href="mailto:"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg><span>البريد الإلكتروني</span></a><a href="https://wa.me/212632819269" target="_blank" rel="noopener noreferrer">WhatsApp: +212 632 819 269</a></div><span class="footer-copy">© <span id="current-year"></span> PhoneX. جميع الحقوق محفوظة.</span></div></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="العودة إلى أعلى الصفحة">↑</button>
+</body>
+</html>

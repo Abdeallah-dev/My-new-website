@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f7fb">
+  <meta name="robots" content="noindex, nofollow">
+  <title>PhoneX | لوحة التحكم</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f4f7fb;
+      --surface: #fff;
+      --surface-soft: #f8fafc;
+      --ink: #172338;
+      --muted: #78859a;
+      --line: #e8edf3;
+      --navy: #172b4d;
+      --navy-soft: #243d63;
+      --green: #15966a;
+      --green-soft: #e7f6ef;
+      --amber: #bf7a10;
+      --amber-soft: #fff4dc;
+      --red: #d34f58;
+      --red-soft: #fff0f0;
+      --blue: #4775d1;
+      --blue-soft: #edf2ff;
+      --shadow: 0 8px 26px rgba(27, 47, 77, .05);
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      color: var(--ink);
+      background: var(--page);
+      font: 14px/1.65 Tahoma, Arial, sans-serif;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 3px solid rgba(71, 117, 209, .35);
+      outline-offset: 2px;
+    }
+    .app-shell { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100vh; }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      display: flex;
+      height: 100vh;
+      flex-direction: column;
+      padding: 24px 16px;
+      color: #eaf0fa;
+      background: var(--navy);
+    }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 3px 10px 28px; color: inherit; text-decoration: none; }
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 12px;
+      color: #fff;
+      background: var(--green);
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .brand-name { font-size: 18px; font-weight: 800; letter-spacing: .2px; }
+    .brand-name span { color: #58d1a2; }
+    .store-caption { margin: -20px 10px 22px; color: #9cacc4; font-size: 11px; }
+    .nav-label { padding: 0 11px 9px; color: #8597b2; font-size: 10px; }
+    .nav-list { display: grid; gap: 5px; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 45px;
+      padding: 9px 12px;
+      border: 0;
+      border-radius: 9px;
+      color: #c1ccdc;
+      background: transparent;
+      text-align: right;
+      transition: background .16s, color .16s;
+    }
+    .nav-item:hover { color: #fff; background: rgba(255,255,255,.07); }
+    .nav-item.active { color: #fff; background: var(--navy-soft); box-shadow: inset -3px 0 #4dcc9b; }
+    .nav-icon { width: 22px; color: #86d9b8; font-size: 17px; text-align: center; }
+    .sidebar-note {
+      margin-top: auto;
+      padding: 13px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 10px;
+      color: #aebbd0;
+      background: rgba(255,255,255,.04);
+      font-size: 10px;
+    }
+    .sidebar-note strong { display: block; margin-bottom: 4px; color: #fff; font-size: 11px; }
+    .main { min-width: 0; padding: 28px clamp(18px, 3.2vw, 46px) 40px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 26px; }
+    .welcome small { color: var(--muted); font-size: 11px; }
+    .welcome h1 { margin: 3px 0 0; color: var(--navy); font-size: clamp(20px, 2.2vw, 27px); line-height: 1.4; }
+    .top-actions { display: flex; align-items: center; gap: 9px; }
+    .date-chip, .icon-button, .primary-button, .secondary-button {
+      min-height: 39px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--surface);
+      color: var(--ink);
+    }
+    .date-chip { display: flex; align-items: center; gap: 7px; padding: 0 11px; color: var(--muted); font-size: 11px; }
+    .icon-button { width: 40px; color: var(--navy); font-size: 16px; }
+    .icon-button:hover, .secondary-button:hover { background: var(--surface-soft); }
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 14px;
+      border-color: var(--green);
+      color: #fff;
+      background: var(--green);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .primary-button:hover { background: #11845d; }
+    .secondary-button { padding: 0 12px; color: var(--navy); font-size: 11px; }
+    .section { display: none; }
+    .section.active { display: block; animation: appear .2s ease-out; }
+    @keyframes appear { from { opacity: .5; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
+    .section-heading h2 { margin: 0; color: var(--navy); font-size: 19px; }
+    .section-heading p { margin: 3px 0 0; color: var(--muted); font-size: 11px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 17px; }
+    .stat-card, .panel {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+    .stat-card { min-width: 0; padding: 15px 16px; }
+    .stat-top { display: flex; align-items: center; justify-content: space-between; gap: 9px; color: var(--muted); font-size: 10px; }
+    .stat-icon { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 10px; font-size: 16px; }
+    .stat-icon.green { color: var(--green); background: var(--green-soft); }
+    .stat-icon.blue { color: var(--blue); background: var(--blue-soft); }
+    .stat-icon.amber { color: var(--amber); background: var(--amber-soft); }
+    .stat-icon.red { color: var(--red); background: var(--red-soft); }
+    .stat-value { display: block; margin-top: 12px; color: var(--navy); font-size: clamp(19px, 2.2vw, 25px); font-weight: 800; line-height: 1.3; }
+    .stat-foot { display: block; margin-top: 5px; color: var(--muted); font-size: 9px; }
+    .positive { color: var(--green); }
+    .dashboard-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(250px, .85fr); gap: 15px; margin-bottom: 16px; }
+    .panel { min-width: 0; padding: 17px; }
+    .panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .panel-heading h3 { margin: 0; color: var(--navy); font-size: 13px; }
+    .panel-heading p { margin: 2px 0 0; color: var(--muted); font-size: 9px; }
+    .chart-legend { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 9px; }
+    .chart-legend i { width: 8px; height: 8px; border-radius: 3px; background: var(--green); }
+    .chart-wrap { position: relative; height: 218px; }
+    .chart-wrap canvas { display: block; width: 100%; height: 100%; }
+    .chart-tooltip {
+      position: absolute;
+      z-index: 1;
+      display: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      color: #fff;
+      background: var(--navy);
+      pointer-events: none;
+      font-size: 10px;
+      white-space: nowrap;
+    }
+    .top-products { display: grid; gap: 12px; }
+    .top-product { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 9px; }
+    .phone-thumb { display: grid; width: 34px; height: 38px; place-items: center; border-radius: 8px; color: var(--navy); background: var(--blue-soft); font-size: 17px; }
+    img.phone-thumb { display: block; flex: 0 0 auto; object-fit: cover; }
+    .top-product-name { min-width: 0; }
+    .top-product-name strong, .top-product-name span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .top-product-name strong { color: var(--ink); font-size: 10px; }
+    .top-product-name span { color: var(--muted); font-size: 9px; }
+    .top-product-sales { color: var(--navy); font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .panel-footer-link { display: block; margin-top: 14px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--green); font-size: 10px; text-align: center; text-decoration: none; }
+    .table-panel { padding: 0; overflow: hidden; }
+    .table-panel .panel-heading { margin: 0; padding: 15px 17px; }
+    .table-scroll { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: right; white-space: nowrap; }
+    th { padding: 10px 14px; color: var(--muted); background: var(--surface-soft); font-size: 9px; font-weight: 600; }
+    td { padding: 11px 14px; border-top: 1px solid var(--line); color: #445168; font-size: 10px; }
+    tbody tr:hover { background: var(--surface-soft); }
+    .table-product { display: flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 700; }
+    .table-product .phone-thumb { flex: 0 0 auto; width: 30px; height: 32px; font-size: 14px; }
+    .muted-cell { color: var(--muted); }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 8px;
+      border-radius: 20px;
+      font-size: 9px;
+      font-weight: 700;
+    }
+    .status::before { width: 5px; height: 5px; border-radius: 50%; background: currentColor; content: ""; }
+    .status-new { color: var(--amber); background: var(--amber-soft); }
+    .status-transit { color: var(--blue); background: var(--blue-soft); }
+    .status-delivered { color: var(--green); background: var(--green-soft); }
+    .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin-bottom: 13px; }
+    .search-box { position: relative; flex: 1 1 220px; max-width: 380px; }
+    .search-box span { position: absolute; top: 50%; right: 12px; color: var(--muted); transform: translateY(-50%); }
+    .search-box input, .filter-select {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 35px 8px 11px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      color: var(--ink);
+      background: var(--surface);
+      font-size: 11px;
+    }
+    .filter-select { width: auto; min-width: 145px; padding: 8px 10px; }
+    .count-label { margin-inline-start: auto; color: var(--muted); font-size: 10px; }
+    .product-name-cell { display: flex; align-items: center; gap: 9px; }
+    .product-name-cell .phone-thumb { width: 37px; height: 42px; }
+    .product-name-cell strong, .product-name-cell small { display: block; }
+    .product-name-cell strong { color: var(--ink); font-size: 10px; }
+    .product-name-cell small { color: var(--muted); font-size: 9px; }
+    .brand-pill { display: inline-block; padding: 3px 8px; border-radius: 15px; color: #53647c; background: var(--surface-soft); font-size: 9px; }
+    .stock-low { color: var(--red); font-weight: 700; }
+    .row-actions { display: flex; gap: 5px; }
+    .row-action {
+      width: 29px;
+      height: 29px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--muted);
+      background: var(--surface);
+    }
+    .row-action:hover { color: var(--navy); background: var(--surface-soft); }
+    .row-action.delete:hover { border-color: #ffd5d5; color: var(--red); background: var(--red-soft); }
+    .empty-state { padding: 28px; color: var(--muted); text-align: center; }
+    .order-status-select {
+      min-height: 30px;
+      padding: 3px 7px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      color: var(--ink);
+      background: var(--surface);
+      font-size: 9px;
+    }
+    .modal-backdrop {
+      position: fixed;
+      z-index: 10;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(15, 29, 49, .48);
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal {
+      width: min(100%, 520px);
+      max-height: min(90vh, 760px);
+      overflow-y: auto;
+      padding: 21px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--surface);
+      box-shadow: 0 24px 70px rgba(11, 25, 45, .2);
+    }
+    .modal-header { display: flex; align-items: start; justify-content: space-between; gap: 10px; margin-bottom: 17px; }
+    .modal-header h2 { margin: 0; color: var(--navy); font-size: 18px; }
+    .modal-header p { margin: 3px 0 0; color: var(--muted); font-size: 10px; }
+    .modal-close { width: 31px; height: 31px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: var(--surface); font-size: 17px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .form-field { display: grid; gap: 5px; color: #58667b; font-size: 10px; }
+    .form-field.full { grid-column: 1 / -1; }
+    .form-field input, .form-field select {
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      color: var(--ink);
+      background: var(--surface);
+      font-size: 11px;
+    }
+    .form-field > span { display: flex; align-items: center; gap: 8px; }
+    .form-field input[type="checkbox"] { width: 16px; min-height: 16px; accent-color: var(--green); }
+    .modal-actions { display: flex; justify-content: flex-start; gap: 8px; margin-top: 17px; }
+    .toast {
+      position: fixed;
+      z-index: 20;
+      right: 50%;
+      bottom: 22px;
+      padding: 10px 15px;
+      border-radius: 9px;
+      color: #fff;
+      background: var(--navy);
+      box-shadow: var(--shadow);
+      font-size: 11px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(50%, 8px);
+      transition: .2s;
+    }
+    .toast.show { opacity: 1; transform: translate(50%, 0); }
+    .auth-screen { display: grid; min-height: 100vh; place-items: center; padding: 18px; }
+    .auth-card { display: grid; width: min(100%, 410px); gap: 13px; padding: 24px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+    .auth-card h1 { margin: 0; color: var(--navy); font-size: 21px; }
+    .auth-card p { margin: 0; color: var(--muted); font-size: 11px; }
+    .auth-card label { display: grid; gap: 5px; color: var(--ink); font-size: 11px; }
+    .auth-card input { min-height: 42px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); }
+    .auth-error { padding: 9px 10px; border-radius: 8px; color: var(--red); background: var(--red-soft); font-size: 10px; }
+    .description-input { min-height: 80px; resize: vertical; }
+    .image-preview { width: 58px; height: 58px; border-radius: 8px; object-fit: cover; background: var(--surface-soft); }
+    body.dark {
+      color-scheme: dark;
+      --page: #101923;
+      --surface: #182431;
+      --surface-soft: #1d2b39;
+      --ink: #e6edf5;
+      --muted: #94a3b5;
+      --line: #2a3948;
+      --navy: #172b4d;
+      --navy-soft: #243d63;
+      --green-soft: #173a30;
+      --amber-soft: #3a3020;
+      --red-soft: #3b2528;
+      --blue-soft: #202f4c;
+      --shadow: 0 8px 26px rgba(0,0,0,.12);
+    }
+    body.dark .welcome h1, body.dark .section-heading h2, body.dark .panel-heading h3,
+    body.dark .stat-value, body.dark .top-product-sales, body.dark .modal-header h2,
+    body.dark .table-product, body.dark .product-name-cell strong { color: #e6edf5; }
+    body.dark td { color: #bac6d4; }
+    body.dark .brand-pill { color: #c2cede; }
+
+    @media (max-width: 1050px) {
+      .app-shell { grid-template-columns: 218px minmax(0, 1fr); }
+      .main { padding-inline: 22px; }
+      .stats-grid { gap: 10px; }
+      .dashboard-grid { grid-template-columns: minmax(0, 1.35fr) minmax(225px, .9fr); }
+    }
+    @media (max-width: 780px) {
+      .app-shell { display: flex; flex-direction: column; }
+      .sidebar { position: relative; z-index: 2; height: auto; padding: 12px 14px; }
+      .brand { padding: 0 5px 10px; }
+      .brand-mark { width: 32px; height: 32px; }
+      .brand-name { font-size: 16px; }
+      .store-caption, .nav-label, .sidebar-note { display: none; }
+      .nav-list { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+      .nav-item { width: auto; min-width: max-content; min-height: 38px; padding: 7px 10px; font-size: 11px; }
+      .nav-item.active { box-shadow: inset 0 -2px #4dcc9b; }
+      .nav-icon { width: auto; font-size: 14px; }
+      .main { padding: 21px 17px 30px; }
+      .dashboard-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 480px) {
+      .main { padding-inline: 13px; }
+      .topbar { align-items: start; }
+      .welcome h1 { font-size: 20px; }
+      .date-chip { display: none; }
+      .top-actions { gap: 6px; }
+      .icon-button { width: 36px; min-height: 36px; }
+      .primary-button { min-height: 36px; padding-inline: 10px; font-size: 10px; }
+      .stats-grid { gap: 9px; }
+      .stat-card { padding: 12px; }
+      .stat-value { font-size: 19px; }
+      .section-heading { align-items: start; }
+      .section-heading h2 { font-size: 17px; }
+      .filter-select { flex: 1 1 130px; }
+      .count-label { width: 100%; }
+      .panel { padding: 13px; }
+      .table-panel { padding: 0; }
+      .table-panel .panel-heading { padding: 13px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-field.full { grid-column: auto; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <section class="auth-screen" id="admin-login-screen" hidden>
+    <form class="auth-card" id="admin-login-form">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">P</div><div class="brand-name">Phone<span>X</span></div></div>
+      <h1>دخول المسؤول</h1>
+      <p>سجّل الدخول باش تسير منتجات وطلبات PhoneX.</p>
+      <label>البريد الإلكتروني<input name="email" type="email" autocomplete="username" required maxlength="254"></label>
+      <label>كلمة المرور<input name="password" type="password" autocomplete="current-password" required maxlength="256"></label>
+      <p class="auth-error" id="login-error" role="alert" hidden></p>
+      <button class="primary-button" type="submit">دخول آمن</button>
+      <a class="panel-footer-link" href="/">العودة للمتجر</a>
+    </form>
+  </section>
+  <div class="app-shell" id="dashboard-app" hidden>
+    <aside class="sidebar" aria-label="القائمة الرئيسية">
+      <a class="brand" href="/" aria-label="العودة للمتجر"><div class="brand-mark" aria-hidden="true">P</div><div class="brand-name">Phone<span>X</span></div></a>
+      <div class="store-caption">إدارة متجر الهواتف</div>
+      <div class="nav-label">القائمة الرئيسية</div>
+      <nav class="nav-list">
+        <button class="nav-item active" type="button" data-section="dashboard"><span class="nav-icon">⌂</span>الرئيسية</button>
+        <button class="nav-item" type="button" data-section="products"><span class="nav-icon">▣</span>المنتجات</button>
+        <button class="nav-item" type="button" data-section="orders"><span class="nav-icon">▤</span>الطلبات</button>
+      </nav>
+      <div class="sidebar-note"><strong id="admin-account"></strong>بيانات المنتجات والطلبات متصلة بقاعدة بيانات المتجر.</div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="welcome">
+          <small id="today-label">الخميس، ٥ نونبر ٢٠٢٦</small>
+          <h1 id="page-title">صباح الخير، المسؤول 👋</h1>
+        </div>
+        <div class="top-actions">
+          <span class="date-chip"><span aria-hidden="true">◷</span><span id="date-chip-label">اليوم</span></span>
+          <button class="icon-button" id="theme-toggle" type="button" aria-label="تبديل الوضع الليلي" title="تبديل الوضع الليلي">☾</button>
+          <a class="secondary-button store-link" href="/">المتجر</a>
+          <button class="primary-button" id="top-add-product" type="button"><span aria-hidden="true">＋</span> زيد منتج</button>
+          <button class="secondary-button" id="logout-button" type="button">خروج</button>
+        </div>
+      </header>
+      <p class="auth-error" id="dashboard-error" role="alert" hidden></p>
+
+      <section class="section active" id="section-dashboard" aria-labelledby="dashboard-title">
+        <div class="section-heading">
+          <div><h2 id="dashboard-title">نظرة عامة</h2><p>ملخص أداء المتجر ديالك اليوم.</p></div>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="stat-top"><span>مبيعات اليوم</span><span class="stat-icon green" aria-hidden="true">↗</span></div>
+            <strong class="stat-value" id="metric-sales">—</strong>
+            <span class="stat-foot">حسب الطلبات المسجلة والمؤكدة</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>طلبات جديدة</span><span class="stat-icon blue" aria-hidden="true">▤</span></div>
+            <strong class="stat-value" id="metric-new-orders">—</strong>
+            <span class="stat-foot">طلبات محتاجة التأكيد</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>المنتجات في المخزون</span><span class="stat-icon green" aria-hidden="true">▣</span></div>
+            <strong class="stat-value" id="metric-stock">—</strong>
+            <span class="stat-foot">مجموع القطع المتوفرة</span>
+          </article>
+          <article class="stat-card">
+            <div class="stat-top"><span>مخزون ناقص</span><span class="stat-icon amber" aria-hidden="true">!</span></div>
+            <strong class="stat-value" id="metric-low-stock">—</strong>
+            <span class="stat-foot">منتجات خاصها إعادة التزويد</span>
+          </article>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel" aria-labelledby="weekly-title">
+            <div class="panel-heading">
+              <div><h3 id="weekly-title">مبيعات الأسبوع</h3><p>الأداء اليومي بالدرهم المغربي</p></div>
+              <span class="chart-legend"><i></i> المبيعات</span>
+            </div>
+            <div class="chart-wrap" id="chart-wrap">
+              <canvas id="sales-chart" aria-label="رسم بياني لمبيعات الأسبوع" role="img"></canvas>
+              <div class="chart-tooltip" id="chart-tooltip"></div>
+            </div>
+          </section>
+          <section class="panel" aria-labelledby="best-sellers-title">
+            <div class="panel-heading">
+              <div><h3 id="best-sellers-title">الأكثر مبيعاً</h3><p>حسب عدد القطع المباعة</p></div>
+            </div>
+            <div class="top-products" id="top-products"></div>
+            <a class="panel-footer-link" href="#products" data-go="products">عرض المنتجات ←</a>
+          </section>
+        </div>
+
+        <section class="panel table-panel" aria-labelledby="recent-orders-title">
+          <div class="panel-heading">
+            <div><h3 id="recent-orders-title">آخر الطلبات</h3><p>آخر الطلبات المسجلة فالمتجر</p></div>
+            <a class="panel-footer-link" href="#orders" data-go="orders" style="margin:0;padding:0;border:0">جميع الطلبات ←</a>
+          </div>
+          <div class="table-scroll"><table>
+            <thead><tr><th>رقم الطلب</th><th>الزبون</th><th>المنتج</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+            <tbody id="recent-orders-body"></tbody>
+          </table></div>
+        </section>
+      </section>
+
+      <section class="section" id="section-products" aria-labelledby="products-title">
+        <div class="section-heading">
+          <div><h2 id="products-title">المنتجات</h2><p>دبّر لائحة الهواتف والمخزون ديالك.</p></div>
+          <button class="primary-button add-product-button" type="button"><span aria-hidden="true">＋</span> زيد منتج</button>
+        </div>
+        <div class="toolbar">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="product-search" type="search" placeholder="قلب على منتج أو ماركة..." autocomplete="off"></label>
+          <select class="filter-select" id="brand-filter" aria-label="فلتر حسب الماركة"><option value="">جميع الماركات</option></select>
+          <span class="count-label" id="product-count"></span>
+        </div>
+        <section class="panel table-panel">
+          <div class="table-scroll"><table>
+            <thead><tr><th>المنتج</th><th>الماركة</th><th>الثمن</th><th>المخزون</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+            <tbody id="products-body"></tbody>
+          </table></div>
+        </section>
+      </section>
+
+      <section class="section" id="section-orders" aria-labelledby="orders-title">
+        <div class="section-heading">
+          <div><h2 id="orders-title">الطلبات</h2><p>تابع حالة الطلبات والتوصيل.</p></div>
+        </div>
+        <div class="toolbar">
+          <label class="search-box"><span aria-hidden="true">⌕</span><input id="order-search" type="search" placeholder="قلب برقم الطلب أو اسم الزبون..." autocomplete="off"></label>
+          <select class="filter-select" id="order-status-filter" aria-label="فلتر حسب حالة الطلب">
+            <option value="">جميع الحالات</option><option value="جديد">جديد</option><option value="في الطريق">في الطريق</option><option value="تسلّم">تسلّم</option>
+          </select>
+          <span class="count-label" id="order-count"></span>
+        </div>
+        <section class="panel table-panel">
+          <div class="table-scroll"><table>
+            <thead><tr><th>الرقم</th><th>الزبون</th><th>المدينة</th><th>المنتج</th><th>المبلغ</th><th>الحالة</th></tr></thead>
+            <tbody id="orders-body"></tbody>
+          </table></div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <form class="modal" id="product-form">
+      <div class="modal-header">
+        <div><h2 id="modal-title">زيد منتج جديد</h2><p>دخل معلومات الهاتف والمخزون.</p></div>
+        <button class="modal-close" id="modal-close" type="button" aria-label="إغلاق">×</button>
+      </div>
+      <div class="form-grid">
+        <label class="form-field full">اسم المنتج<input name="name" required maxlength="80" placeholder="مثال: iPhone 15"></label>
+        <label class="form-field">الماركة
+          <select name="brand" required><option value="">اختار الماركة</option><option>Apple</option><option>Samsung</option><option>Xiaomi</option><option>Oppo</option><option>Huawei</option><option>Realme</option><option value="other">أخرى</option></select>
+        </label>
+        <label class="form-field">الثمن الأصلي (درهم)<input name="price" type="number" required min="1" max="10000000" step="1" placeholder="مثال: 8990"></label>
+        <label class="form-field">ثمن التخفيض (اختياري)<input name="salePrice" type="number" min="1" max="10000000" step="1" placeholder="خليه فارغ إلا ما كاينش تخفيض"></label>
+        <label class="form-field">الكمية في المخزون<input name="stock" type="number" required min="0" max="10000" step="1" placeholder="مثال: 8"></label>
+        <label class="form-field full">الوصف والمواصفات<input name="description" maxlength="500" placeholder="مثال: 256GB · شاشة OLED"></label>
+        <label class="form-field full">صورة المنتج (اختيارية — JPEG أو PNG أو WebP، حتى 5MB)<input name="imageFile" type="file" accept="image/jpeg,image/png,image/webp"><small>الصورة اللي تختار غادي تبان فاللائحة وصفحة المتجر. إلا ما رفعتش صورة، غادي نستعمل صورة توضيحية محلية.</small><img class="image-preview" id="image-preview" alt="معاينة صورة المنتج" hidden></label>
+        <label class="form-field full"><span><input name="verified" type="checkbox"> تأكدت من صحة الثمن والمخزون</span></label>
+        <label class="form-field full"><span><input name="published" type="checkbox"> نشر المنتج في صفحة المتجر</span></label>
+        <input name="imageUrl" type="hidden">
+        <input name="tag" type="hidden">
+      </div>
+      <div class="modal-actions">
+        <button class="primary-button" type="submit">حفظ المنتج</button>
+        <button class="secondary-button" id="modal-cancel" type="button">إلغاء</button>
+      </div>
+    </form>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="admin-dashboard.js" defer></script>
+</body>
+</html>
