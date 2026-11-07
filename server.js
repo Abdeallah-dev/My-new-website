@@ -40,7 +40,7 @@ if (!databaseUrl) {
   throw new Error("DATABASE_URL is required. Copy .env.example to .env and configure PostgreSQL.");
 }
 
-const pool = createDatabasePool(databaseUrl, { idleTimeoutMillis: 30000, max: 10 });
+const pool = createDatabasePool(databaseUrl, { idleTimeoutMillis: 30000 });
 
 pool.on("error", error => {
   console.error("Unexpected PostgreSQL pool error.", error);
@@ -190,7 +190,7 @@ async function requireAdmin(request, response, next) {
     response.status(401).json({ error: "Admin sign-in required." });
     return;
   }
-  try {
+  try { 
     const result = await pool.query(
       "SELECT session_hash, csrf_hash FROM admin_sessions WHERE session_hash = $1 AND expires_at > now()",
       [hashToken(token)]
@@ -788,25 +788,29 @@ app.use((error, _request, response, _next) => {
   response.status(500).json({ error: "An unexpected server error occurred." });
 });
 
-const server = app.listen(port, "0.0.0.0", () => {
-  console.log(`PhoneX server listening on port ${port}.`);
-});
+export default app;
 
-function shutdown(signal) {
-  console.log(`${signal} received; closing PhoneX server.`);
-  server.close(error => {
-    if (error) {
-      console.error("HTTP server shutdown failed.", error);
-      process.exitCode = 1;
-    }
-    pool.end().catch(poolError => {
-      console.error("PostgreSQL pool shutdown failed.", poolError);
-      process.exitCode = 1;
-    });
+if (!process.env.VERCEL) {
+  const server = app.listen(port, "0.0.0.0", () => {
+    console.log(`PhoneX server listening on port ${port}.`);
   });
-}
 
-process.once("SIGINT", () => shutdown("SIGINT"));
-process.once("SIGTERM", () => shutdown("SIGTERM"));
+  function shutdown(signal) {
+    console.log(`${signal} received; closing PhoneX server.`);
+    server.close(error => {
+      if (error) {
+        console.error("HTTP server shutdown failed.", error);
+        process.exitCode = 1;
+      }
+      pool.end().catch(poolError => {
+        console.error("PostgreSQL pool shutdown failed.", poolError);
+        process.exitCode = 1;
+      });
+    });
+  }
+
+  process.once("SIGINT", () => shutdown("SIGINT"));
+  process.once("SIGTERM", () => shutdown("SIGTERM"));
+}
 
 export { app, pool };
