@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="900" viewBox="0 0 720 900" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="44" y1="45" x2="672" y2="858" gradientUnits="userSpaceOnUse"><stop stop-color="#18313B"/><stop offset="1" stop-color="#080D18"/></linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="matrix(433 351 -308 380 354 424)" gradientUnits="userSpaceOnUse"><stop stop-color="#248EA6" stop-opacity=".4"/><stop offset="1" stop-color="#080D18" stop-opacity="0"/></radialGradient>
+    <linearGradient id="pod" x1="210" y1="280" x2="341" y2="619" gradientUnits="userSpaceOnUse"><stop stop-color="#F6FCFF"/><stop offset=".56" stop-color="#B9D2DF"/><stop offset="1" stop-color="#547080"/></linearGradient>
+    <linearGradient id="case" x1="242" y1="485" x2="499" y2="713" gradientUnits="userSpaceOnUse"><stop stop-color="#EFFBFF"/><stop offset=".58" stop-color="#90B6C5"/><stop offset="1" stop-color="#38586B"/></linearGradient>
+    <filter id="shadow" x="88" y="170" width="544" height="679" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feGaussianBlur stdDeviation="28"/></filter>
+  </defs>
+  <path fill="url(#bg)" d="M0 0h720v900H0z"/><path fill="url(#glow)" d="M0 0h720v900H0z"/>
+  <circle cx="360" cy="440" r="254" stroke="#94F5F4" stroke-opacity=".1"/><circle cx="360" cy="440" r="212" stroke="#94F5F4" stroke-opacity=".07"/>
+  <ellipse cx="359" cy="738" fill="#000" fill-opacity=".5" filter="url(#shadow)" rx="185" ry="31"/>
+  <g transform="rotate(-13 272 433)">
+    <rect x="207" y="281" width="104" height="281" rx="49" fill="url(#pod)" stroke="#F2FFFF" stroke-opacity=".7" stroke-width="3"/>
+    <rect x="238" y="491" width="42" height="150" rx="21" fill="url(#pod)"/>
+    <ellipse cx="259" cy="360" rx="24" ry="30" fill="#D8EFF3"/>
+    <circle cx="258" cy="359" r="9" fill="#6C8997"/>
+    <path d="M249 510v82" stroke="#536F7C" stroke-opacity=".5" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <g transform="rotate(13 444 433)">
+    <rect x="409" y="281" width="104" height="281" rx="49" fill="url(#pod)" stroke="#F2FFFF" stroke-opacity=".7" stroke-width="3"/>
+    <rect x="434" y="491" width="42" height="150" rx="21" fill="url(#pod)"/>
+    <ellipse cx="461" cy="360" rx="24" ry="30" fill="#D8EFF3"/>
+    <circle cx="461" cy="359" r="9" fill="#6C8997"/>
+    <path d="M455 510v82" stroke="#536F7C" stroke-opacity=".5" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <rect x="236" y="555" width="248" height="152" rx="55" fill="url(#case)" stroke="#E3F8FC" stroke-opacity=".65" stroke-width="3"/>
+  <path d="M237 604h246" stroke="#456979" stroke-opacity=".46" stroke-width="2"/>
+  <circle cx="360" cy="672" r="7" fill="#4BD7E8"/>
+  <path d="M106 736h105M520 212h74" stroke="#58D8E8" stroke-opacity=".45" stroke-linecap="round" stroke-width="2"/>
+  <circle cx="106" cy="736" r="4" fill="#58D8E8"/><circle cx="594" cy="212" r="4" fill="#58D8E8"/>
+</svg>
